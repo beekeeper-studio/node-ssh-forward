@@ -34,7 +34,7 @@ class SSHConnection {
         if (!options.endPort) {
             this.options.endPort = 22;
         }
-        if (!options.privateKey) {
+        if (!options.privateKey && !options.skipDefaultPrivateKey) {
             this.options.privateKey = fs.readFileSync(`${os.homedir()}${path.sep}.ssh${path.sep}id_rsa`);
         }
     }

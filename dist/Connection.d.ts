@@ -9,6 +9,7 @@ interface Options {
     endPort?: number;
     endHost: string;
     agentSocket?: string;
+    skipDefaultPrivateKey?: boolean;
 }
 interface ForwardingOptions {
     fromPort: number;
