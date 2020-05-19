@@ -151,7 +151,12 @@ class SSHConnection {
             connection.on('error', (error) => {
                 reject(error);
             });
-            connection.connect(options);
+            try {
+                connection.connect(options);
+            }
+            catch (error) {
+                reject(error);
+            }
         });
     }
     async getPassphrase() {
