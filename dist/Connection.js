@@ -34,8 +34,11 @@ class SSHConnection {
         if (!options.endPort) {
             this.options.endPort = 22;
         }
-        if (!options.privateKey && !options.skipDefaultPrivateKey) {
-            this.options.privateKey = fs.readFileSync(`${os.homedir()}${path.sep}.ssh${path.sep}id_rsa`);
+        if (!options.privateKey && !options.agentForward && !options.skipAutoPrivateKey) {
+            const defaultFilePath = path.join(os.homedir(), '.ssh', 'id_rsa');
+            if (fs.existsSync(defaultFilePath)) {
+                this.options.privateKey = fs.readFileSync(defaultFilePath);
+            }
         }
     }
     async shutdown() {
