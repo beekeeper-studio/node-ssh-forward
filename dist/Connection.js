@@ -144,8 +144,12 @@ class SSHConnection {
             if (stream) {
                 options['sock'] = stream;
             }
-            if (options.privateKey && options.privateKey.toString().toLowerCase().includes('encrypted')) {
-                options['passphrase'] = (this.options.passphrase) ? this.options.passphrase : await this.getPassphrase();
+            // PPK private keys can be encrypted, but won't contain the word 'encrypted'
+            // in fact they always contain a `encryption` header, so we can't do a simple check
+            options['passphrase'] = this.options.passphrase;
+            const looksEncrypted = this.options.privateKey ? this.options.privateKey.toString().toLowerCase().includes('encrypted') : false;
+            if (looksEncrypted && !options['passphrase'] && !this.options.noReadline) {
+                options['passphrase'] = await this.getPassphrase();
             }
             connection.on('ready', () => {
                 this.connections.push(connection);
